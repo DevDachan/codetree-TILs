@@ -74,7 +74,7 @@ public class Main {
 
     public static int[][] map, knightMap;
 
-    public static HashMap<Integer, Integer> hp = new HashMap<>();
+    public static HashMap<Integer, int[]> hp = new HashMap<>();
 
     public static HashMap<Integer, List<Position>> knights = new HashMap<>();
 
@@ -101,7 +101,6 @@ public class Main {
         }
         
         // 초기 기사 입력
-        Queue<Integer> alive = new ArrayDeque<>();
         int r,c,h,w,k;
         for(int num = 1; num <= N; num++){
             st = new StringTokenizer(br.readLine());
@@ -124,10 +123,10 @@ public class Main {
             knights.put(num, temp);
 
             // 기사의 hp 저장
-            hp.put(num, k);
+            hp.put(num, new int[]{k,k});
         } 
 
-        int result = 0;
+        // 필요한 변수 선언
         Queue<Integer> qu = new ArrayDeque<>();
         HashSet<Integer> visited = new HashSet<>();
         HashSet<Integer> damageCount = new HashSet<>();
@@ -171,19 +170,26 @@ public class Main {
 
                 // 만약 미는데 문제가 없다면 밀기 시작!
                 if(!nextCheck){
-                    
+
                     // 방문했던 모든 기사 밀기
                     for(int cur : visited){
 
                         damageCount.clear();
+
+                        // 초기화 먼저 시키기
+                        for(Position i : knights.get(cur)){
+                            if(knightMap[i.x ][i.y] == cur) knightMap[i.x][i.y] = 0;
+                        }
+
                         // 모든 몸체 미는데 대미지 확인
                         // 이동한 곳에서 w x h 내에 놓인 함정의 수만큼 피해
                         for(Position i : knights.get(cur)){
-                            nextX = i.x + deltas[dir].x;
-                            nextY = i.y + deltas[dir].y;
-                            knightMap[nextX][nextY] = cur;
-                            if(map[nextX][nextY] < 0){
-                                damageCount.add(map[nextX][nextY]);
+                            i.x  += deltas[dir].x;
+                            i.y  += deltas[dir].y;
+                            knightMap[i.x][i.y] = cur;
+
+                            if(map[i.x][i.y] < 0){
+                                damageCount.add(map[i.x][i.y]);
                             }
                         }
 
@@ -191,11 +197,10 @@ public class Main {
                         if(cur == num) continue;
 
                         // hp에서 깎고 결과 값에 더하기
-                        hp.put(cur, hp.get(cur)- damageCount.size());
-                        result += damageCount.size();
+                        hp.get(cur)[0] -= damageCount.size();
 
                         // 만약 피가 전부 달았다면 죽이기
-                        if(hp.get(cur) < 0){
+                        if(hp.get(cur)[0] <= 0){
                             hp.remove(cur);
                             for(Position i : knights.get(cur)){
                                 knightMap[i.x][i.y] = 0;
@@ -208,6 +213,10 @@ public class Main {
             }
         }
 
+        int result = 0;
+        for(int alive : hp.keySet()){
+            result += hp.get(alive)[1] - hp.get(alive)[0];
+        }
 
         System.out.println(result);
     }
