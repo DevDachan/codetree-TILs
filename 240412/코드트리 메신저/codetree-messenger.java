@@ -158,25 +158,25 @@ public class Main {
 		Node start = tree[c];
 		int result = 0;
 		int len = 0;
-		Queue<Node> qu = new ArrayDeque<>();
+		Queue<Integer> qu = new ArrayDeque<>();
 		if (start.left != null && start.left.offset)
-			qu.add(start.left);
+			qu.add(start.left.num);
 		if (start.right != null && start.right.offset)
-			qu.add(start.right);
+			qu.add(start.right.num);
 
 		while (!qu.isEmpty()) {
 			int size = qu.size();
 			len++;
 			while (size-- > 0) {
-				Node cur = qu.poll();
+				Node cur = tree[qu.poll()];
 				if (cur.auth >= len) {
 					result++;
 				}
 
 				if (cur.left != null && cur.left.offset)
-					qu.add(cur.left);
+					qu.add(cur.left.num);
 				if (cur.right != null && cur.right.offset)
-					qu.add(cur.right);
+					qu.add(cur.right.num);
 
 			}
 		}
