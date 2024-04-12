@@ -108,7 +108,7 @@ public class Main {
 
 		// 1번째는 반드시 100이 나옴
 		for (int i = 0; i <= N; i++) {
-			tree[i] = new Node(0, 0, true, null, null, null);
+			tree[i] = new Node(i, 0, true, null, null, null);
 		}
 
 		st = new StringTokenizer(br.readLine());
