@@ -52,7 +52,6 @@ set을 두고 모든 노드 확인?? (N == 100_000) 많을지도..? -> 자기부
 -> 순서를 확인할 때는 Node의 depth별로 확인하며 OFF된 곳은 pass하기
 
 
-
 Q번에 걸친 명령을 순서대로 진행해 알맞은 답을 출력해라
 
 
@@ -170,7 +169,6 @@ public class Main {
 			len++;
 			while (size-- > 0) {
 				Node cur = qu.poll();
-
 				if (cur.auth >= len) {
 					result++;
 				}
@@ -195,12 +193,20 @@ public class Main {
 		} else if (tree[a].parent.right != null) {
 			tree[a].parent.right = tree[b];
 		}
-
 		if (tree[b].parent.left != null && tree[b].parent.left.num == b) {
 			tree[b].parent.left = tree[a];
 		} else if (tree[b].parent.right != null) {
 			tree[b].parent.right = tree[a];
 		}
+		Node temp = tree[a].parent;
+		tree[a].parent = tree[b].parent;
+		tree[b].parent = temp;
 
 	}
 }
+
+/*
+ * 
+ * 6 23 0 0 5 0 0 4 -------------- 3 13 0 0 6 0 0 5
+ * 
+ */
