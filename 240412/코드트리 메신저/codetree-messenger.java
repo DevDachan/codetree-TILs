@@ -52,6 +52,7 @@ set을 두고 모든 노드 확인?? (N == 100_000) 많을지도..? -> 자기부
 -> 순서를 확인할 때는 Node의 depth별로 확인하며 OFF된 곳은 pass하기
 
 
+
 Q번에 걸친 명령을 순서대로 진행해 알맞은 답을 출력해라
 
 
@@ -106,13 +107,17 @@ public class Main {
 		tree = new Node[N + 1];
 
 		// 1번째는 반드시 100이 나옴
-		tree[0] = new Node(0, 0, true, null, null, null);
+		for (int i = 0; i <= N; i++) {
+			tree[i] = new Node(0, 0, true, null, null, null);
+		}
 
 		st = new StringTokenizer(br.readLine());
 		st.nextToken();
+
 		for (int i = 1; i <= N; i++) {
 			int p = Integer.parseInt(st.nextToken());
-			tree[i] = new Node(i, 0, true, tree[p], null, null);
+			tree[i].parent = tree[p];
+
 			if (tree[p].left == null)
 				tree[p].left = tree[i];
 			else
