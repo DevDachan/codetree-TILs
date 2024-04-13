@@ -105,6 +105,8 @@ public class Main {
 			// 1. 모든 참가자가 출구 방향으로 이동한다.
 			movePeople();
 
+			if (boxPeople == 0)
+				break;
 			// 2. 회전시킨다
 			rotate();
 		}
