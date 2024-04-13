@@ -109,6 +109,7 @@ public class Main {
 				break;
 			// 2. 회전시킨다
 			rotate();
+
 		}
 
 		for (int i : peoples.keySet()) {
@@ -119,16 +120,38 @@ public class Main {
 	}
 
 	public static void rotate() {
-		People cur = peoples.get(boxPeople);
-		int len = Math.max(Math.abs(cur.x - exit.x), Math.abs(cur.y - exit.y));
+		// 최소 거리는 가장 가까운 참가자로부터 구한다.
 		int startX = 0, startY = 0;
-		out: for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				if ((i <= cur.x && i + len >= cur.x) && (i <= exit.x && i + len >= exit.x)
-						&& (j <= cur.y && j + len >= cur.y) && (j <= exit.y && j + len >= exit.y)) {
-					startX = i;
-					startY = j;
-					break out;
+		int len = 1;
+		mainout: for (int sz = 1; sz <= 10; sz++) {
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+
+					if (i + sz >= n || j + sz >= n)
+						continue;
+
+					// 만약 exit이 포함되어 있지 않다면 pass
+					if (!(i <= exit.x && i + sz >= exit.x) || !(j <= exit.y && j + sz >= exit.y))
+						continue;
+
+					// 해당 범위 안에 다른 참가자가 존재하는지 확인합니다
+					boolean contain = false;
+					xout: for (int x = i; x <= i + sz; x++) {
+						for (int y = j; y <= j + sz; y++) {
+							if (peopleMap[x][y].size() > 0) {
+								contain = true;
+								break xout;
+							}
+						}
+					}
+					// 포함하고 있다면 여기부터 시작하기
+					if (contain) {
+						startX = i;
+						startY = j;
+						len = sz;
+						break mainout;
+					}
+
 				}
 			}
 		}
